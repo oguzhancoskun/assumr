@@ -7,21 +7,99 @@
 </head>
 <body class="p-4">
 
-  <h3>Manage AWS Profiles</h3>
+  <div class="container py-4">
+    <h3 class="mb-4 text-center">Assumr Extension Settings</h3>
 
-  <div class="mb-3">
-    <label for="configInput" class="form-label">Paste your <code>.aws/config</code> content:</label>
-    <textarea id="configInput" class="form-control" rows="6" placeholder="[profile dev] ..."></textarea>
-    <button id="parseBtn" class="btn btn-primary mt-2">Parse Config</button>
+    <!-- Shortcut Information -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Keyboard Shortcut</h5>
+        <p class="card-text">The shortcut to open the Assumr modal can be customized below.</p>
+
+        <div class="mb-3">
+          <label class="form-label">Select Modifier Keys:</label>
+          <div> <!-- Use a div for better layout of inline checkboxes -->
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="shortcutCmd">
+              <label class="form-check-label" for="shortcutCmd">Cmd</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="shortcutOption">
+              <label class="form-check-label" for="shortcutOption">Option</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="shortcutCtrl">
+              <label class="form-check-label" for="shortcutCtrl">Ctrl</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="shortcutShift">
+              <label class="form-check-label" for="shortcutShift">Shift</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="shortcutKey" class="form-label">Main Key:</label>
+          <input type="text" class="form-control" id="shortcutKey" maxlength="1" placeholder="e.g., K">
+          <small class="form-text text-muted">Enter a single letter, number, or symbol.</small>
+        </div>
+
+         <button id="saveShortcutBtn" class="btn btn-primary">Save Shortcut</button>
+         <span id="shortcutStatus" class="ms-2"></span>
+
+        <p class="card-text mt-3"><small class="text-muted">After saving, you may need to reload the AWS page for the new shortcut to take effect.</small></p>
+      </div>
+    </div>
+
+    <!-- Proxy Settings -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Assumr Proxy Settings</h5>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="proxyEnabled">
+          <label class="form-check-label" for="proxyEnabled">Enable Proxy Mode</label>
+        </div>
+
+        <div id="proxySettingsFields">
+          <div class="mb-3">
+            <label for="proxyPort" class="form-label">Proxy Port (e.g., 55001)</label>
+            <input type="number" class="form-control" id="proxyPort" value="55001">
+            <small class="form-text text-muted">Connects to <code>localhost:PORT</code></small>
+          </div>
+          <div class="mb-3">
+            <label for="proxyToken" class="form-label">Authentication Token</label>
+            <input type="text" class="form-control" id="proxyToken" placeholder="Paste token from local app">
+            <small class="form-text text-muted">Token provided by your running local Assumr proxy application.</small>
+          </div>
+           <button id="testProxyBtn" class="btn btn-secondary">Test Proxy Connection</button>
+           <span id="proxyTestStatus" class="ms-2"></span>
+        </div>
+
+        <p class="card-text mt-3"><small class="text-muted">When Proxy Mode is enabled, profiles will be fetched automatically from your local proxy application instead of using the manual config below.</small></p>
+      </div>
+    </div>
+
+    <!-- Manual Profile Management (Conditional Display) -->
+    <div id="manualConfigSection" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Manage AWS Profiles (Manual)</h5>
+
+        <div class="mb-3">
+          <label for="configInput" class="form-label">Paste your <code>.aws/config</code> content:</label>
+          <textarea id="configInput" class="form-control" rows="6" placeholder="[profile dev] ..."></textarea>
+          <button id="parseBtn" class="btn btn-primary mt-2">Parse Config</button>
+        </div>
+
+        <hr>
+
+        <h5 class="mt-3">Detected Profiles</h5>
+        <ul id="profileList" class="list-group mb-3"></ul>
+
+        <button id="saveBtn" class="btn btn-success">Save Profiles</button>
+        <button id="resetBtn" class="btn btn-danger ms-2">Reset</button>
+      </div>
+    </div>
   </div>
-
-  <hr>
-
-  <h5>Detected Profiles</h5>
-  <ul id="profileList" class="list-group mb-3"></ul>
-
-  <button id="saveBtn" class="btn btn-success">Save Profiles</button>
-  <button id="resetBtn" class="btn btn-danger ms-2">Reset</button>
 
   <script src="settings.js"></script>
 </body>
