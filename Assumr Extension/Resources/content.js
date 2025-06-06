@@ -1,7 +1,10 @@
-browser.runtime.sendMessage({ greeting: "hello" }).then((response) => {
-    console.log("Received response: ", response);
+// content.js
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "showAlert") {
+    alert("AssumR clicked! Popup coming soon...");
+  }
 });
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log("Received request: ", request);
+browser.runtime.sendMessage({ greeting: "hello" }).then((response) => {
+  console.log("Received response: ", response);
 });

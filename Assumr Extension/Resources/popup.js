@@ -1,1 +1,3 @@
-console.log("Hello World!", browser);
+document.getElementById("settings-btn").addEventListener("click", () => {
+  chrome.runtime.openOptionsPage();
+});
