@@ -28,12 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  document.getElementById('parseBtn').addEventListener('click', () => {
-    const text = configInput.value;
-    const matches = [...text.matchAll(/\[profile\s+([^\]]+)\]/g)];
-    const profiles = matches.map(m => m[1]);
-    saveAndRender(profiles);
-  });
+    document.getElementById('parseBtn').addEventListener('click', () => {
+      const text = configInput.value;
+
+      const blocks = text.split(/\[profile\s+([^\]]+)\]/g).slice(1); // alternating [name, content, name, content...]
+      const profiles = [];
+
+      for (let i = 0; i < blocks.length; i += 2) {
+        const profileName = blocks[i].trim();
+        const content = blocks[i + 1];
+        const roleArn = (content.match(/role_arn\s*=\s*(.+)/) || [])[1]?.trim();
+        const sourceProfile = (content.match(/source_profile\s*=\s*(.+)/) || [])[1]?.trim();
+        const region = (content.match(/region\s*=\s*(.+)/) || [])[1]?.trim();
+
+        if (roleArn && sourceProfile) {
+          profiles.push({ profile: profileName, roleArn, sourceProfile, region });
+        }
+      }
+
+      chrome.storage.sync.set({ profiles }, () => {
+        renderProfiles(profiles.map(p => p.profile));
+      });
+    });
+
 
   document.getElementById('saveBtn').addEventListener('click', () => {
     const items = [...profileList.children].map(li => li.firstChild.textContent);
